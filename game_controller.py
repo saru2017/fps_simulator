@@ -1,3 +1,6 @@
+from const import WIDTH, HEIGHT
+
+
 class Player:
     pass
 
@@ -38,3 +41,4 @@ class GameController():
 
 if __name__ == '__main__':
     gc = GameController()
+    print(WIDTH, HEIGHT)
