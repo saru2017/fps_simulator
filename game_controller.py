@@ -1,22 +1,13 @@
 from const import WIDTH, HEIGHT
-
-
-class Player:
-    pass
-
-
-class Bullet:
-    pass
+# from player import Player
 
 
 class GameController():
     players = []
     bullets = []
 
-    def __init__(self):
-        player0 = Player()
-        player1 = Player()
-        self.players = [player0, player1]
+    def __init__(self, players):
+        self.players = players
 
     def player_move(self):
         for player in self.players:
