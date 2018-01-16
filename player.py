@@ -36,7 +36,6 @@ class Player:
         else :
             self.count += 1
 
-        print(self.count)
         # 壁に当たると反射する処理
         if self.x < 0:
             self.vx *= -1
