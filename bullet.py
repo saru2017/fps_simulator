@@ -26,6 +26,3 @@ class Bullet(Object):
     def move(self):
         self.x += self.dx
         self.y += self.dy
-
-if __name__ == '__main__':
-    print("sucsess")
