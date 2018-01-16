@@ -10,12 +10,12 @@ class Bullet:
         self.radian = radian
         self.v = v
         self.damage = damage
-        self.dx = math.round(math.cos(radian) * v)
-        self.dy = math.round(math.sin(radian) * v)
-
-    def move(self):
+        self.dx = math.round(math.cos(rad)*v)
+        self.dy = math.round(marh.sin(rad)*v)
+    def move() :
         self.x += self.dx
         self.y += self.dy
 
-if __name__ == '__main__':
-    print("sucsess")
+    ##-----------------------------------------------------
+#if __name__ == '__main__':
+#    print("sucsess")
