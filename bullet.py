@@ -1,12 +1,13 @@
-#j-kawa
+# j-kawa
 import math
 
-class Bullet :
-    def __init__(self,x=0,y=0,size=1,radian=0,v=10,damage=5):
+
+class Bullet:
+    def __init__(self, x=0, y=0, size=1, radian=0, v=10, damage=5):
         self.x = x
         self.y = y
         self.size = size
-        self.rad = rad
+        self.radian = radian
         self.v = v
         self.damage = damage
         self.dx = math.round(math.cos(rad)*v)
