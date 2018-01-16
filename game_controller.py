@@ -8,9 +8,11 @@ class GameController():
         self.bullets = []
 
     def __set_object(self, object):
-        self.f.cvs.coords(
-            object.id, object.x, object.y,
-            object.x + object.size, object.y + object.size)
+        x1 = object.x
+        y1 = object.y
+        x2 = object.x + object.size
+        y2 = object.y + object.size
+        self.f.cvs.coords(object.id, x1, y1, x2, y2)
 
     def player_move(self):
         for player in self.players:
@@ -20,10 +22,13 @@ class GameController():
     def player_shot(self, index=-1):
         if index == -1:
             for player in self.players:
-                player.shot(self.f, random.randint(-180, 180))
+                bullet = player.shot(self.f, random.randint(-180, 180))
+                self.__set_object(bullet)
+                self.bullets.append(bullet)
         elif index < len(self.players):
             bullet = self.players[index].shot(self.f, random.randint(-180, 180))
             self.bullets.append(bullet)
+            self.__set_object(bullet)
 
     def bullet_move(self):
         for bullet in self.bullets:
@@ -32,7 +37,7 @@ class GameController():
 
     def update(self):
         self.player_move()
-        self.player_shot(1)
+        self.player_shot()
         self.bullet_move()
 
 

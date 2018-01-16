@@ -42,7 +42,7 @@ class Player(Object):
     def shot(self, f, radian):
         # bulletインスタンスの生成
         # radianに沿ってbulletのインスタンスを生成する
-        bullet = Bullet.create(f, self.x, self.y, radian)
+        bullet = Bullet.create(f, self.id, self.x, self.y, radian)
         return bullet
 
 if __name__ == '__main__':
