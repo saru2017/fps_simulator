@@ -12,9 +12,9 @@ class Bullet :
         self.dx = math.round(math.cos(rad)*v)
         self.dy = math.round(marh.sin(rad)*v)
     def move() :
-        self.x += self.dx 
+        self.x += self.dx
         self.y += self.dy
 
-    ##----------------------------------------------------- 
-if __name__ == '__main__':     
-    print("sucsess")
+    ##-----------------------------------------------------
+#if __name__ == '__main__':
+#    print("sucsess")
