@@ -1,21 +1,28 @@
-# j-kawa
+from object import Object
+from const import (
+    BULLET_SIZE, BULLET_VELOCITY, BULLET_DAMAGE, BULLET_COLORS)
 import math
 
 
-class Bullet:
-    def __init__(self, x=0, y=0, size=1, radian=0, v=10, damage=5):
-        self.x = x
-        self.y = y
-        self.size = size
+class Bullet(Object):
+    def __init__(self, id, x, y, radian, player_id=-1, size=BULLET_SIZE, v=BULLET_VELOCITY, damage=BULLET_DAMAGE, color=BULLET_COLORS[0]):
+        super().__init__(id, x, y, size, color)
+        self.player_id = player_id
         self.radian = radian
+
         self.v = v
         self.damage = damage
-        self.dx = math.round(math.cos(radian) * v)
-        self.dy = math.round(math.sin(radian) * v)
+        self.dx = math.cos(radian) * v
+        self.dy = math.sin(radian) * v
+
+    @classmethod
+    def create(cls, f, player_id, x, y, radian):
+        # print(player_id, x, y, radian)
+        return cls(f.cvs.create_oval(
+            x, y, BULLET_SIZE, BULLET_SIZE,
+            fill=BULLET_COLORS[player_id - 1],
+            width=0), x, y, radian, player_id=player_id)
 
     def move(self):
         self.x += self.dx
         self.y += self.dy
-
-if __name__ == '__main__':
-    print("sucsess")
