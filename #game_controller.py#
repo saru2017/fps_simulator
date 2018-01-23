@@ -2,7 +2,7 @@ from const import WIDTH, HEIGHT
 # from player import Player
 
 
-class GameController():
+class GameCoyntroller():
     players = []
     bullets = []
 
