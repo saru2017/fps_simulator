@@ -53,14 +53,19 @@ class GameController():
                     if dist < (PLAYER_SIZE+BULLET_SIZE):
                         p.damage += BULLET_DAMAGE
                         del self.bullets[self.bullets.index(b)]
+                        self.f.cvs.delete(b.id)
 
     def checkBulletAlive(self):
         for b in self.bullets:
-		        if (b.x < 0) or (b.x > WIDTH):
-		            del self.bullets[self.bullets.index(b)]
-		            continue
-		        if (b.y < 0) or (b.y > HEIGHT):
-		            del self.bullets[self.bullets.index(b)]
+            if (b.x < 0) or (b.x > WIDTH):
+                del self.bullets[self.bullets.index(b)]
+                self.f.cvs.delete(b.id)
+                continue
+            if (b.y < 0) or (b.y > HEIGHT):
+                del self.bullets[self.bullets.index(b)]
+                self.f.cvs.delete(b.id)
+                continue
+
 
 if __name__ == '__main__':
     gc = GameController()
