@@ -18,6 +18,7 @@ class Player(Object):
         self.count = 0
         self.vx = math.sin(self.radian) * PLAYER_VELOCITY
         self.vy = math.cos(self.radian) * PLAYER_VELOCITY
+        self.damage = 0
 
     @classmethod
     def create(cls, f, x, y):

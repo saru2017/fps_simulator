@@ -1,4 +1,7 @@
 import random
+import math
+from const import (
+    PLAYER_SIZE, PLAYER_VELOCITY, PLAYER_COLOR, WIDTH, HEIGHT, BULLET_SIZE, BULLET_DAMAGE)
 
 
 class GameController():
@@ -39,6 +42,29 @@ class GameController():
         self.player_move()
         self.player_shot()
         self.bullet_move()
+        self.checkCollision()
+        self.checkBulletAlive()
+
+    def checkCollision(self):
+        for p in self.players[:]:
+            for b in self.bullets[:]:
+                if b.player_id != p.id:
+                    dist = math.sqrt(math.pow(p.x - b.x,2)+math.pow(p.y - b.y,2))
+                    if dist < (PLAYER_SIZE+BULLET_SIZE):
+                        p.damage += BULLET_DAMAGE
+                        del self.bullets[self.bullets.index(b)]
+                        self.f.cvs.delete(b.id)
+
+    def checkBulletAlive(self):
+        for b in self.bullets:
+            if (b.x < 0) or (b.x > WIDTH):
+                del self.bullets[self.bullets.index(b)]
+                self.f.cvs.delete(b.id)
+                continue
+            if (b.y < 0) or (b.y > HEIGHT):
+                del self.bullets[self.bullets.index(b)]
+                self.f.cvs.delete(b.id)
+                continue
 
 
 if __name__ == '__main__':
