@@ -1,39 +1,45 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from object import Object
 from bullet import Bullet
-from player_const import *
+from const import (
+    PLAYER_SIZE, PLAYER_VELOCITY, PLAYER_COLOR, WIDTH, HEIGHT)
 import random
 import math
 # for debug
 import time
 
 
-class Player:
+class Player(Object):
     def __init__(self, id, x, y):
-        self.id = id
-        self.x = x
-        self.y = y
-        self.size = PLAYER_SIZE
+        super().__init__(id, x, y, PLAYER_SIZE, PLAYER_COLOR)
         self.radian = math.radians(random.randint(-180, 180))
         self.count = 0
         self.vx = math.sin(self.radian) * PLAYER_VELOCITY
         self.vy = math.cos(self.radian) * PLAYER_VELOCITY
+        self.damage = 0
+
+    @classmethod
+    def create(cls, f, x, y):
+        return cls(f.cvs.create_oval(
+            x, y, PLAYER_SIZE, PLAYER_SIZE,
+            fill=PLAYER_COLOR, width=0), x, y)
 
     # Player の角度変更
-    def setRadian(newRadian):
-        self.radian = newRadian
+    def set_radian(self, radian):
+        self.radian = radian
         self.vx = math.sin(self.radian) * PLAYER_VELOCITY
         self.vy = math.cos(self.radian) * PLAYER_VELOCITY
 
     # Playerの動き制御
     def move(self):
-        if self.count > 10 :
+        if self.count > 10:
             self.radian = math.radians(random.randint(-180, 180))
             self.vx = math.sin(self.radian) * PLAYER_VELOCITY
             self.vy = math.cos(self.radian) * PLAYER_VELOCITY
             self.count = 0
-        else :
+        else:
             self.count += 1
 
         # 壁に当たると反射する処理
@@ -48,11 +54,12 @@ class Player:
 
         self.x += self.vx
         self.y += self.vy
+
     # 銃弾の発射
-    def shot(self, radian):
+    def shot(self, f, radian):
         # bulletインスタンスの生成
         # radianに沿ってbulletのインスタンスを生成する
-        bullet = Bullet(self.x, self.y, BULLET_SIZE, radian, BULLET_VELOCITY, BULLET_DAMAGE)
+        bullet = Bullet.create(f, self.id, self.x, self.y, radian)
         return bullet
 
 if __name__ == '__main__':
