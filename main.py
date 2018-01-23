@@ -7,7 +7,6 @@ from frame import Frame
 from player import Player
 from game_controller import GameController
 import tkinter as Tk
-
 PLAYER_SIZE = 10
 PLAYER_COLOR = 'red'
 BULLET_SIZE = 10
@@ -33,6 +32,8 @@ if __name__ == '__main__':
         print("player1: (%.1f, %.1f), player2: (%.1f, %.1f)" % (
             gc.players[0].x, gc.players[0].y,
             gc.players[1].x, gc.players[1].y))
+        print("Damage1: (%.1d), Damage2: (%.1d)" % (
+            gc.players[0].damage,gc.players[1].damage))
         f.cvs.after(100, update)
 
     update()
