@@ -1,0 +1,25 @@
+#+TITLE: モデル図の説明
+#+AUTHOR: Kurihara Yoshiki
+#+DATE: 2018-01-30
+#+LANGUAGE: ja
+#+EMAIL: y-kurihara@ist.osaka-u.ac.jp
+
+
+* Frameオブジェクト
+Tkinter Frameの描画管理
+
+* GameConrollerオブジェクト
+Player,Bulletオブジェクトの管理
+- Player,Bulletの移動(move()呼び出し)
+- Playerの発砲(shot()呼び出し)
+- Player,Bulletオブジェクトの現在の座標からFrameに描画
+
+* Player
+GameControllerから呼び出されるPlayerオブジェクトの持つ情報更新の各種インターフェスを所持
+- move() :: Playerを移動させるインターフェス
+- shot() :: Playerから発砲させるインターフェス
+
+* Bullet
+GameControllerから呼び出されるBulletオブジェクトの持つ情報更新の各種インターフェスを所持
+- create() :: Bulletオブジェクトを生成するインターフェス
+- move() :: Bulletオブジェクトを移動させるインターフェス
