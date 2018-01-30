@@ -49,11 +49,20 @@ class GameController():
         for p in self.players[:]:
             for b in self.bullets[:]:
                 if b.player_id != p.id:
-                    dist = math.sqrt(math.pow(p.x - b.x,2)+math.pow(p.y - b.y,2))
-                    if dist < (PLAYER_SIZE+BULLET_SIZE):
+                    a = self.checkBalletPlayerCollision(b,p)
+                    if a == True:
                         p.damage += BULLET_DAMAGE
                         del self.bullets[self.bullets.index(b)]
                         self.f.cvs.delete(b.id)
+
+    def checkBalletPlayerCollision(self, b, p):
+        for i in range(b.v):
+            tmpx = b.x + (b.dx * i) / b.v
+            tmpy = b.y + (b.dy * i) / b.v
+            dist = math.sqrt(math.pow(p.x - tmpx,2)+math.pow(p.y - tmpy,2))
+            if dist < (PLAYER_SIZE+BULLET_SIZE):
+                return True
+        return False
 
     def checkBulletAlive(self):
         for b in self.bullets:
