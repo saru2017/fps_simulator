@@ -15,7 +15,8 @@ class Player(Object):
     count = 0
 
     def __init__(self, id, x, y):
-        super().__init__(id, x, y, PLAYER_SIZE, PLAYER_COLORS[id - 1])
+        color_index = (id - 1) % len(PLAYER_COLORS)
+        super().__init__(id, x, y, PLAYER_SIZE, PLAYER_COLORS[color_index])
         self.radian = math.radians(random.randint(-180, 180))
         self.count = 0
         self.vx = math.sin(self.radian) * PLAYER_VELOCITY
@@ -24,10 +25,11 @@ class Player(Object):
 
     @classmethod
     def create(cls, f, x, y):
+        color_index = cls.count % len(PLAYER_COLORS)
         cls.count += 1
         return cls(f.cvs.create_oval(
             x, y, PLAYER_SIZE, PLAYER_SIZE,
-            fill=PLAYER_COLORS[cls.count - 1], width=0), x, y)
+            fill=PLAYER_COLORS[color_index], width=0), x, y)
 
     # Player の角度変更
     def set_radian(self, radian):
