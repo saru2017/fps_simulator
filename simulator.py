@@ -14,14 +14,15 @@ BULLET_COLOR = 'red'
 
 f = Frame()
 
+def quit():
+    f.quit()
 
 def set_bullet(bullet):
     f.cvs.coords(
         bullet.id, bullet.x, bullet.y,
         bullet.x + BULLET_SIZE, bullet.y + BULLET_SIZE)
 
-
-if __name__ == '__main__':
+def simulator():
     player1 = Player.create(f, 0, 0)
     player2 = Player.create(f, 0, 0)
     gc = GameController(f, [player1, player2])
@@ -34,6 +35,17 @@ if __name__ == '__main__':
             gc.players[1].x, gc.players[1].y))
         f.cvs.after(100, update)
 
+    f.cvs.after(1000,quit)
+
     update()
     f.pack(fill=Tk.BOTH, expand=1)
     f.mainloop()
+    return player1,player2
+
+if __name__ == '__main__':
+    print('--- simulator start ---')
+    for i in range(0,10):
+        result = simulator();
+        print(result[0].damage,result[1].damage)
+    print('--- simulator end ---')
+
