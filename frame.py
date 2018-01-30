@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import tkinter as Tk
 import random as R
 
