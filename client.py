@@ -1,14 +1,14 @@
+from game_controller import GameController
 from utils import get_radian
 
 
-class Client():
+class Client(GameController):
     def __init__(self, frame, player, enemy, enemy_latency):
-        self.frame = frame
+        super().__init__(frame, [player, enemy])
         self.player = player
         self.enemy = enemy
         self.enemy_latency = enemy_latency
 
-        self.bullets = []
         self.event_queue = []
 
     def __set_object(self, object):
@@ -108,6 +108,8 @@ class Client():
         # 実行
         self.__do_event()
         self.bullet_move()
+        self.checkCollision()
+        self.checkBulletAlive()
 
 
 if __name__ == '__main__':
@@ -125,7 +127,8 @@ if __name__ == '__main__':
         # print("player: (%.1f, %.1f), enemy: (%.1f, %.1f)" % (
         #     client.player.x, client.player.y,
         #     client.enemy.x, client.enemy.y))
-        print(client.event_queue)
+        print("Damage1: (%.1d), Damage2: (%.1d)" % (
+            client.players[0].damage, client.players[1].damage))
         frame.cvs.after(100, update)
 
     update()

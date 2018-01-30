@@ -1,13 +1,13 @@
 import random
 import math
 
-from const import (WIDTH, HEIGHT, BULLET_SIZE, BULLET_DAMAGE,PLAYER_SIZE)
+from const import (WIDTH, HEIGHT)
 from utils import get_radian
 
 
 class GameController():
-    def __init__(self, f, players):
-        self.f = f
+    def __init__(self, frame, players):
+        self.frame = frame
         self.players = players
         self.bullets = []
 
@@ -16,7 +16,7 @@ class GameController():
         y1 = object.y
         x2 = object.x + object.size
         y2 = object.y + object.size
-        self.f.cvs.coords(object.id, x1, y1, x2, y2)
+        self.frame.cvs.coords(object.id, x1, y1, x2, y2)
 
     def player_move(self):
         for player in self.players:
@@ -32,11 +32,11 @@ class GameController():
                     player.y,
                     self.players[enemy_index].x,
                     self.players[enemy_index].y)
-                bullet = player.shot(self.f, radian)
+                bullet = player.shot(self.frame, radian)
                 self.__set_object(bullet)
                 self.bullets.append(bullet)
         elif index < len(self.players):
-            bullet = self.players[index].shot(self.f, random.randint(-180, 180))
+            bullet = self.players[index].shot(self.frame, random.randint(-180, 180))
             self.bullets.append(bullet)
             self.__set_object(bullet)
 
@@ -56,17 +56,17 @@ class GameController():
         for p in self.players[:]:
             for b in self.bullets[:]:
                 if b.player_id != p.id:
-                    if self.checkBalletPlayerCollision(b,p):
-                        p.damage += BULLET_DAMAGE
+                    if self.checkBalletPlayerCollision(b, p):
+                        p.damage += b.damage
                         del self.bullets[self.bullets.index(b)]
-                        self.f.cvs.delete(b.id)
+                        self.frame.cvs.delete(b.id)
 
     def checkBalletPlayerCollision(self, b, p):
         for i in range(b.v):
             tmpx = b.x + (b.dx * i) / b.v
             tmpy = b.y + (b.dy * i) / b.v
-            dist = math.sqrt(math.pow(p.x - tmpx,2)+math.pow(p.y - tmpy,2))
-            if dist < (PLAYER_SIZE+BULLET_SIZE):
+            dist = math.sqrt(math.pow(p.x - tmpx, 2) + math.pow(p.y - tmpy, 2))
+            if dist < (p.size + b.size):
                 return True
         return False
 
@@ -74,11 +74,11 @@ class GameController():
         for b in self.bullets:
             if (b.x < 0) or (b.x > WIDTH):
                 del self.bullets[self.bullets.index(b)]
-                self.f.cvs.delete(b.id)
+                self.frame.cvs.delete(b.id)
                 continue
             if (b.y < 0) or (b.y > HEIGHT):
                 del self.bullets[self.bullets.index(b)]
-                self.f.cvs.delete(b.id)
+                self.frame.cvs.delete(b.id)
                 continue
 
 
