@@ -17,10 +17,11 @@ class Bullet(Object):
 
     @classmethod
     def create(cls, f, player_id, x, y, radian):
+        bullet_index = (player_id - 1) % len(BULLET_COLORS)
         # print(player_id, x, y, radian)
         return cls(f.cvs.create_oval(
             x, y, BULLET_SIZE, BULLET_SIZE,
-            fill=BULLET_COLORS[player_id - 1],
+            fill=BULLET_COLORS[bullet_index],
             width=0), x, y, radian, player_id=player_id)
 
     def move(self):

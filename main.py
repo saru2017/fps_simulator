@@ -32,7 +32,7 @@ if __name__ == '__main__':
             gc.players[0].x, gc.players[0].y,
             gc.players[1].x, gc.players[1].y))
         print("Damage1: (%.1d), Damage2: (%.1d)" % (
-            gc.players[0].damage,gc.players[1].damage))
+            gc.players[0].damage, gc.players[1].damage))
         f.cvs.after(100, update)
 
     update()
