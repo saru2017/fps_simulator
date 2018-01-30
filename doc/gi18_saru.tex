@@ -100,16 +100,13 @@ FPSやTPSでは，遅延が存在すると自分の狙いと実際の敵の位置が一致しないこと
 も予想される．
 
 \section{関連研究}
-ネットワークの遅延は，様々なゲームにおいて悪影響を与える．
+ネットワークの遅延は，ネットゲームにとって致命的な問題である．
 特にFPSなどの1人称のゲーム''The effect~unreal tournament 2003''は，MMO，スポーツなどの3人称のゲーム''the effect~NFL football"やRTSなどの自由視点のゲーム''the effect~WarcraftIII'', ''the effect real-time strategy games''と比較して，遅延によるパフォーマンス低下がより大きくなることが観測されている．''On Latency ~ in Online Games''
-
-具体的には，latencyが増加するにあたってFPSにおいてキル率が線形的に減少するという結果が''An experimental~Quake 3''，MMOでは戦闘時間が増加するという結果が''The Effect of ~ on MMORPGs''，
-
+具体的には，latencyが増加するにあたってFPSにおいてキル率が線形的に減少するという結果が''An experimental~Quake 3''，MMOでは戦闘時間が増加するという結果や''The Effect of ~ on MMORPGs''，遅延時間が大きくなるにつれてプレイヤーの離脱率が上昇する''How sensitive~network quality''など，様々な悪影響が確認されている．
 
 
-
-
-
+''network game traffic modeling'' ''improving end-to-end~ networks''は，ネットゲームにおけるトラフィックの特徴について説明している．
+''packet-level~perspective''は，各ゲーム種ごとにパケットの特徴について説明している
 
 \section{計算機シミュレーション}
 
@@ -125,7 +122,7 @@ FPSやTPSでは，遅延が存在すると自分の狙いと実際の敵の位置が一致しないこと
 \end{center}
 \end{figure}
 
-想定するモデルを図1に示す. 黄色の円はプレイヤーの当たり判定を，青い円がプレイヤーが移動しうる範囲を表している．弾丸が黒い線を通過する際，プレイヤーが赤い帯の内部に居る場合命中し，そうでない場合命中しない．またプレイヤーが存在する確率を一様とすると，弾丸の命中率は青い円の中で赤い帯が占める割合と一致する．この割合は，当たり判定の半径を$d$, 移動速度を$v$,遅延時間を$t$,$\cos \theta = d/v t$とすると, 
+想定するモデルを図1に示す. 黄色の円はプレイヤーの当たり判定を，青い円がプレイヤーが移動しうる範囲を表している．弾丸が黒い線を通過する際，プレイヤーが赤い帯の内部に居る場合命中し，そうでない場合命中しない．またプレイヤーが存在する確率を一様とすると，弾丸の命中率は青い円の中で赤い帯が占める割合と一致する．この割合は，当たり判定の半径を$d$, 移動速度を$v$,遅延時間を$t$,$\cos \theta = d/v t$とすると,円の面積が$\pi (vt)^2$, 赤い帯と青い円が交わる面積は上下の中心角$\pi -2\theta$の扇型2つと，左右の三角形2つの和で求められるので， 
 \begin{equation}
 \frac{\pi(vt)^2(\frac{2\pi-4\theta}{2\pi})+2dvt\sin\theta}{\pi (vt)^2}
 \end{equation}
