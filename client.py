@@ -1,5 +1,7 @@
 import random
 
+from utils import get_radian
+
 
 class Client():
     def __init__(self, frame, player, enemy, enemy_latency):
@@ -29,7 +31,12 @@ class Client():
         self.__set_object(self.player)
 
     def shot(self):
-        bullet = self.player.shot(self.frame, random.randint(-180, 180))
+        radian = get_radian(
+            self.player.x,
+            self.player.y,
+            self.enemy.x,
+            self.enemy.y)
+        bullet = self.player.shot(self.frame, radian)
         self.__set_object(bullet)
         self.bullets.append(bullet)
 

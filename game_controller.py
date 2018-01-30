@@ -1,7 +1,8 @@
 import random
 import math
-from const import (
-    PLAYER_SIZE, PLAYER_VELOCITY, PLAYER_COLOR, WIDTH, HEIGHT, BULLET_SIZE, BULLET_DAMAGE)
+
+from const import (WIDTH, HEIGHT, BULLET_SIZE, BULLET_DAMAGE)
+from utils import get_radian
 
 
 class GameController():
@@ -24,8 +25,14 @@ class GameController():
 
     def player_shot(self, index=-1):
         if index == -1:
-            for player in self.players:
-                bullet = player.shot(self.f, random.randint(-180, 180))
+            for i, player in enumerate(self.players):
+                enemy_index = (i + 1) % len(self.players)
+                radian = get_radian(
+                    player.x,
+                    player.y,
+                    self.players[enemy_index].x,
+                    self.players[enemy_index].y)
+                bullet = player.shot(self.f, radian)
                 self.__set_object(bullet)
                 self.bullets.append(bullet)
         elif index < len(self.players):
@@ -49,9 +56,9 @@ class GameController():
         for p in self.players[:]:
             for b in self.bullets[:]:
                 if b.player_id != p.id:
-                    dist = math.sqrt(math.pow(p.x - b.x,2)+math.pow(p.y - b.y,2))
-                    if dist < (PLAYER_SIZE+BULLET_SIZE):
-                        p.damage += BULLET_DAMAGE
+                    dist = math.sqrt(math.pow(p.x - b.x, 2) + math.pow(p.y - b.y, 2))
+                    if dist < (p.size + b.size):
+                        p.damage += b.damage
                         del self.bullets[self.bullets.index(b)]
                         self.f.cvs.delete(b.id)
 
