@@ -16,13 +16,16 @@ class Bullet(Object):
         self.dy = math.sin(radian) * v
 
     @classmethod
-    def create(cls, f, player_id, x, y, radian):
+    def create(cls, f, player_id, x, y, radian, visible = True):
         bullet_index = (player_id - 1) % len(BULLET_COLORS)
         # print(player_id, x, y, radian)
-        return cls(f.cvs.create_oval(
-            x, y, BULLET_SIZE, BULLET_SIZE,
-            fill=BULLET_COLORS[bullet_index],
-            width=0), x, y, radian, player_id=player_id)
+        if visible:
+            return cls(f.cvs.create_oval(
+                x, y, BULLET_SIZE, BULLET_SIZE,
+                fill=BULLET_COLORS[bullet_index],
+                width=0), x, y, radian, player_id=player_id)
+        else:
+            return cls(-1, x, y, radian, player_id=player_id)
 
     def move(self):
         self.x += self.dx

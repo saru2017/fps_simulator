@@ -12,8 +12,8 @@ import random
 from const import (WIDTH, HEIGHT)
 import csv
 
-p1_latency = 50
-p2_latency = 50
+p1_latency = 5
+p2_latency = 100
 
 
 def simulator(RUN_COUNT=100):
@@ -67,12 +67,19 @@ def simulator3(RUN_COUNT=100):
     #f = Frame()
     f1 = Frame()
     f2 = Frame()
-    FRAME_TIME = 144
+    FRAME_TIME = 10
+
+    p1_vis = True #p1を可視化
+    b1_vis = True #p1の弾丸を可視化
+    p2_vis = True #p2を可視化
+    b2_vis = True #p2の弾丸を可視化
+
+    visuals = [p1_vis, b1_vis, p2_vis, b2_vis]
 
     #player1 = Player.create(f, random.randrange(WIDTH), random.randrange(HEIGHT))
     #player2 = Player.create(f, random.randrange(WIDTH), random.randrange(HEIGHT))
-    player1 = Player.create(f1, random.randrange(WIDTH), random.randrange(HEIGHT))
-    player2 = Player.create(f1, random.randrange(WIDTH), random.randrange(HEIGHT))
+    player1 = Player.create(f1, random.randrange(WIDTH), random.randrange(HEIGHT), visible = p1_vis)
+    player2 = Player.create(f1, random.randrange(WIDTH), random.randrange(HEIGHT), visible = p2_vis)
 
     #player1.id = 1
     #player2.id = 2
@@ -81,7 +88,7 @@ def simulator3(RUN_COUNT=100):
     #cli2 = Client_player(f, player2, player1, 50)
 
     cli1 = Client_player(f1, player1, player2, p1_latency)
-    cli2 = Client_player(f1, player2, player1, p2_latency)
+    cli2 = Client_player(f1, player2, player1, p2_latency, visible = visuals)
 
     cli1.connectClient(cli2)
     cli2.connectClient(cli1)
@@ -127,14 +134,13 @@ if __name__ == '__main__':
     print('--- simulator start ---')
     """
     results2 = []
-    for i in range(0, 10):
-        result = simulator3()
-        results2.append((result[0].damage, result[1].damage))
-        print(result[0].damage, result[1].damage)
-        file_name = "Result_Latency#P1-{0}_P2-{1}.csv".format(p1_latency, p2_latency)
-        with open(file_name, 'a') as f:
-            writer = csv.writer(f)
-            writer.writerow([result[0].damage, result[1].damage])
+    result = simulator3()
+    results2.append((result[0].damage, result[1].damage))
+    print(result[0].damage, result[1].damage)
+    file_name = "Result_Latency#P1-{0}_P2-{1}.csv".format(p1_latency, p2_latency)
+    with open(file_name, 'a') as f:
+        writer = csv.writer(f)
+        writer.writerow([result[0].damage, result[1].damage])
     print('--- simulator end ---')
     #print(results)
     print(results2)

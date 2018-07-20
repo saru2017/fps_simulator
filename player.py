@@ -24,12 +24,15 @@ class Player(Object):
         self.damage = 0
 
     @classmethod
-    def create(cls, f, x, y):
+    def create(cls, f, x, y, visible = True):
         color_index = cls.count % len(PLAYER_COLORS)
         cls.count += 1
-        return cls(f.cvs.create_oval(
-            x, y, PLAYER_SIZE, PLAYER_SIZE,
-            fill=PLAYER_COLORS[color_index], width=0), x, y)
+        if visible:
+            return cls(f.cvs.create_oval(
+                x, y, PLAYER_SIZE, PLAYER_SIZE,
+                fill=PLAYER_COLORS[color_index], width=0), x, y)
+        else:
+            return cls(-1, x, y)
 
     # Player の角度変更
     def set_radian(self, radian):
@@ -61,10 +64,10 @@ class Player(Object):
         self.y += self.vy
 
     # 銃弾の発射
-    def shot(self, f, radian):
+    def shot(self, f, radian, visible = True):
         # bulletインスタンスの生成
         # radianに沿ってbulletのインスタンスを生成する
-        bullet = Bullet.create(f, self.id, self.x, self.y, radian)
+        bullet = Bullet.create(f, self.id, self.x, self.y, radian, visible = visible)
         return bullet
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ import math
 from const import (WIDTH, HEIGHT)
 from utils import get_radian
 class Client_player():
-    def __init__(self, frame, player, enemy, enemy_latency):
+    def __init__(self, frame, player, enemy, enemy_latency, visible = [True, True, True, True]):
         self.player = player
         self.enemy = enemy
         self.enemy_late = copy.deepcopy(enemy)
@@ -16,17 +16,20 @@ class Client_player():
         self.event_queue = []
         self.bullets = []
 
+        self.visible = visible
+
     def connectClient(self, ctrl):
         self.enemy_controller = ctrl
 
-    def __set_object(self, object):
-        x1 = object.x
-        y1 = object.y
-        x2 = object.x + object.size
-        y2 = object.y + object.size
-        #if object.id == 2:
-        #    print('{}, {}, {}, {}'.format(x1, y1, x2, y2))
-        self.frame.cvs.coords(object.id, x1, y1, x2, y2)
+    def __set_object(self, object, visible):
+        if visible:
+            x1 = object.x
+            y1 = object.y
+            x2 = object.x + object.size
+            y2 = object.y + object.size
+            #if object.id == 2:
+            #    print('{}, {}, {}, {}'.format(x1, y1, x2, y2))
+            self.frame.cvs.coords(object.id, x1, y1, x2, y2)
 
     def __reserve_event(self, event_name, count, arg1=None):
         self.event_queue.append({
@@ -37,7 +40,7 @@ class Client_player():
 
     def move(self):
         self.player.move()
-        self.__set_object(self.player)
+        self.__set_object(self.player, self.visible[0])
 
     def shot(self, radian=None):
         if radian is None:
@@ -46,8 +49,8 @@ class Client_player():
                 self.player.y,
                 self.enemy.x,
                 self.enemy.y)
-        bullet = self.player.shot(self.frame, radian)
-        self.__set_object(bullet)
+        bullet = self.player.shot(self.frame, radian, self.visible[1])
+        self.__set_object(bullet, self.visible[1])
         self.bullets.append(bullet)
 
     def enemy_move(self):
@@ -56,7 +59,7 @@ class Client_player():
         #self.__set_object(self.enemy)
         self.enemy_late = copy.deepcopy(self.enemy)
         #print(self.enemy_late.id)
-        self.__set_object(self.enemy_late)
+        self.__set_object(self.enemy_late, self.visible[2])
     def enemy_shot(self):
         #相手の射撃を取得
 
@@ -76,12 +79,12 @@ class Client_player():
             
             self.bullets.append(nb)
             #(nb.id)
-            self.__set_object(nb)
+            self.__set_object(nb, self.visible[3])
         
     def bullet_move(self):
         for bullet in self.bullets:
             bullet.move()
-            self.__set_object(bullet)
+            self.__set_object(bullet, self.visible[1])
 
     def reserve_move(self):
         self.__reserve_event('move', 0)
@@ -92,7 +95,7 @@ class Client_player():
             self.player.y,
             self.enemy_late.x,
             self.enemy_late.y)
-        self.__reserve_event('shot', 0, radian)
+        self.__reserve_event('shot', 3, radian)
 
     def reserve_enemy_move(self):
         self.__reserve_event('enemy_move', self.enemy_latency)
@@ -141,6 +144,7 @@ class Client_player():
                     self.frame.cvs.delete(b.id)
                     #print("player:{} is hit".format(self.player.id))
     def checkBalletPlayerCollision(self, b, p):
+        
         for i in range(b.v):
             tmpx = b.x + (b.dx * i) / b.v
             tmpy = b.y + (b.dy * i) / b.v
@@ -148,7 +152,23 @@ class Client_player():
             if dist < (p.size + b.size):
                 return True
         return False
-
+        """
+        def between(l, c, r):
+            if l < c and c < r:
+                return True
+            elif l > c and c > r:
+                return True
+            else:
+                return False
+        tan = math.tan(b.radian)
+        if not between(b.x, p.x, b.x + b.dx) or not between(b.y, p.y, b.y + b.dy):
+            return False
+        d = (tan * p.x - p.y - b.x * tan + b.y) / math.sqrt(math.pow(tan, 2) + 1)
+        if d < (p.size + b.size):
+            return True
+        else:
+            return False
+        """
     def checkBulletAlive(self):
         for b in self.bullets:
             if (b.x < 0) or (b.x > WIDTH):
