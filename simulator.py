@@ -13,7 +13,7 @@ from const import (WIDTH, HEIGHT)
 import csv
 
 p1_latency = 0
-p2_latency = 1
+p2_latency = 7
 
 
 def simulator(RUN_COUNT=100):
