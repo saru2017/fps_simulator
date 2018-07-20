@@ -76,14 +76,14 @@ def simulator3(RUN_COUNT=100):
     #cli2 = Client_player(f, player2, player1, 50)
 
     cli1 = Client_player(f1, player1, player2, 25)
-    cli2 = Client_player(f1, player2, player1, 100)
+    cli2 = Client_player(f1, player2, player1, 25)
 
     cli1.connectClient(cli2)
     cli2.connectClient(cli1)
 
     #gc = Client(f, player1, player2, 5)
     #print('f1: {}, f2:{}'.format(f1, f2))
-    print(player1.id, player2.id)
+    #print(player1.id, player2.id)
 
     def update():
         cli1.update()
