@@ -58,31 +58,44 @@ def simulator2(RUN_COUNT=100):
     return player1, player2
 
 def simulator3(RUN_COUNT=100):
-    f = Frame()
+    f1 = Frame()
+    f2 = Frame()
     FRAME_TIME = 100
 
-    player1 = Player.create(f, 0, 0)
-    player2 = Player.create(f, 0, 0)
-    cli1 = Client_player(f, player1, player2, 5)
-    cli2 = Client_player(f, player2, player1, 5)
+    player1 = Player.create(f1, 0, 0)
+    player2 = Player.create(f2, 0, 0)
+    cli1 = Client_player(f1, player1, player2, 5)
+    cli2 = Client_player(f2, player2, player1, 5)
+
+    cli1.connectClient(cli2)
+    cli2.connectClient(cli1)
+
     #gc = Client(f, player1, player2, 5)
     print(player1.id, player2.id)
 
     def update():
-        gc.update()
+        cli1.update()
+        cli2.update()
+        """
         print("player1: (%.1f, %.1f), player2: (%.1f, %.1f)" % (
             gc.players[0].x, gc.players[0].y,
             gc.players[1].x, gc.players[1].y))
-        f.cvs.after(FRAME_TIME, update)
+        """
+        f1.cvs.after(FRAME_TIME, update)
+        f2.cvs.after(FRAME_TIME, update)
 
-    f.cvs.after(RUN_COUNT * FRAME_TIME, f.quit)
+    f1.cvs.after(RUN_COUNT * FRAME_TIME, f1.quit)
+    f2.cvs.after(RUN_COUNT * FRAME_TIME, f2.quit)
 
     update()
-    f.pack(fill=Tk.BOTH, expand=1)
-    f.mainloop()
+    f1.pack(fill=Tk.BOTH, expand=1)
+    f2.pack(fill=Tk.BOTH, expand=1)
+    f1.mainloop()
+    f2.mainloop()
     return player1, player2
 
 if __name__ == '__main__':
+    """
     print('--- simulator start ---')
     results = []
     for i in range(0, 10):
@@ -91,9 +104,10 @@ if __name__ == '__main__':
         print(result[0].damage, result[1].damage)
     print('--- simulator end ---')
     print('--- simulator start ---')
+    """
     results2 = []
     for i in range(0, 10):
-        result = simulator2()
+        result = simulator3()
         results2.append((result[0].damage, result[1].damage))
         print(result[0].damage, result[1].damage)
     print('--- simulator end ---')

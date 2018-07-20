@@ -1,14 +1,22 @@
 from game_controller import GameController
 from utils import get_radian
+import copy
+import random
+import math
 
-
+from const import (WIDTH, HEIGHT)
+from utils import get_radian
 class Client_player():
     def __init__(self, frame, player, enemy, enemy_latency):
         self.player = player
         self.enemy = enemy
+        self.enemy_late = copy.copy(enemy)
         self.enemy_latency = enemy_latency
-
+        self.frame = frame
         self.event_queue = []
+        self.bullets = []
+    def connectClient(self, ctrl):
+        self.enemy_controller = ctrl
 
     def __set_object(self, object):
         x1 = object.x
@@ -41,21 +49,24 @@ class Client_player():
 
     def enemy_move(self):
         #相手の動きを取得
-        self.enemy.move()
-        self.__set_object(self.enemy)
+        #self.enemy.move()
+        #self.__set_object(self.enemy)
+        self.enemy_late = copy.copy(self.enemy)
 
-    def enemy_shot(self, radian=None):
+    def enemy_shot(self):
         #相手の射撃を取得
-        if radian is None:
-            radian = get_radian(
-                self.enemy.x,
-                self.enemy.y,
-                self.player.x,
-                self.player.y)
-        bullet = self.enemy.shot(self.frame, radian)
-        self.__set_object(bullet)
-        self.bullets.append(bullet)
 
+        #相手のbulletsにあって自分のbulletsにないものを探査して、自分のbulletsにコピー
+        new_bullets = []
+        for b in self.enemy_controller.bullets:
+            for b_ in self.bullets:
+                if b.id != b_.id:
+                    new_bullets.append(b)
+        
+        for nb in new_bullets:
+            self.bullets.append(nb)
+            self.__set_object(nb)
+        
     def bullet_move(self):
         for bullet in self.bullets:
             bullet.move()
@@ -68,20 +79,15 @@ class Client_player():
         radian = get_radian(
             self.player.x,
             self.player.y,
-            self.enemy.x,
-            self.enemy.y)
+            self.enemy_late.x,
+            self.enemy_late.y)
         self.__reserve_event('shot', 0, radian)
 
     def reserve_enemy_move(self):
         self.__reserve_event('enemy_move', self.enemy_latency)
 
     def reserve_enemy_shot(self):
-        radian = get_radian(
-            self.enemy.x,
-            self.enemy.y,
-            self.player.x,
-            self.player.y)
-        self.__reserve_event('enemy_shot', self.enemy_latency, radian)
+        self.__reserve_event('enemy_shot', self.enemy_latency)
 
     def __do_event(self):
         # 実行
