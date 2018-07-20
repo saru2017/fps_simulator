@@ -63,7 +63,7 @@ def simulator2(RUN_COUNT=100):
     f.mainloop()
     return player1, player2
 
-def simulator3(RUN_COUNT=100):
+def simulator3(RUN_COUNT=1000):
     #f = Frame()
     f1 = Frame()
     f2 = Frame()

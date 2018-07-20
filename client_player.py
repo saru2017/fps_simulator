@@ -16,6 +16,10 @@ class Client_player():
         self.event_queue = []
         self.bullets = []
 
+        self.HISTORY_LENGTH = 200
+        self.history = []
+        self.time = 0
+
         self.visible = visible
 
     def connectClient(self, ctrl):
@@ -54,10 +58,14 @@ class Client_player():
         self.bullets.append(bullet)
 
     def enemy_move(self):
+        #if self.player.id == 2:
+            #print('time: {}, enemy({}, {}), enemy_late({}, {})'.format(self.time, self.enemy.x, self.enemy.y, self.enemy_late.x, self.enemy_late.y))
+
         #相手の動きを取得
         #self.enemy.move()
         #self.__set_object(self.enemy)
-        self.enemy_late = copy.deepcopy(self.enemy)
+        self.enemy_late.x = self.enemy_controller.history[-self.enemy_latency][0]
+        self.enemy_late.y = self.enemy_controller.history[-self.enemy_latency][1]
         #print(self.enemy_late.id)
         self.__set_object(self.enemy_late, self.visible[2])
     def enemy_shot(self):
@@ -65,7 +73,7 @@ class Client_player():
 
         #相手のbulletsにあって自分のbulletsにないものを探査して、自分のbulletsにコピー
         new_bullets = []
-        for b in self.enemy_controller.bullets:
+        for b in self.enemy_controller.history[-self.enemy_latency][2]:
             flag = False
             for b_ in self.bullets:
                 if b.id == b_.id:
@@ -95,7 +103,7 @@ class Client_player():
             self.player.y,
             self.enemy_late.x,
             self.enemy_late.y)
-        self.__reserve_event('shot', 3, radian)
+        self.__reserve_event('shot', 0, radian)
 
     def reserve_enemy_move(self):
         self.__reserve_event('enemy_move', self.enemy_latency)
@@ -121,7 +129,16 @@ class Client_player():
         for i in range(len(self.event_queue)):
             self.event_queue[i]['count'] -= 1
 
+    def __save_history(self):
+        if len(self.history) < self.HISTORY_LENGTH:
+            self.history.append((self.player.x, self.player.y, self.bullets))
+        else:
+            self.history = self.history[1:]
+            self.history.append((self.player.x, self.player.y, self.bullets))
+
     def update(self):
+        self.time += 1
+
         # 予約
         self.reserve_move()
         self.reserve_shot()
@@ -132,6 +149,11 @@ class Client_player():
         self.bullet_move()
         self.checkCollision()
         self.checkBulletAlive()
+
+        #履歴の保存
+        self.__save_history()
+
+
         #if self.player.id == 1:
         #    print('{}, {}'.format(self.player.x, self.player.y))
 
