@@ -10,11 +10,12 @@ class Client_player():
     def __init__(self, frame, player, enemy, enemy_latency):
         self.player = player
         self.enemy = enemy
-        self.enemy_late = copy.copy(enemy)
+        self.enemy_late = copy.deepcopy(enemy)
         self.enemy_latency = enemy_latency
         self.frame = frame
         self.event_queue = []
         self.bullets = []
+
     def connectClient(self, ctrl):
         self.enemy_controller = ctrl
 
@@ -23,6 +24,8 @@ class Client_player():
         y1 = object.y
         x2 = object.x + object.size
         y2 = object.y + object.size
+        #if object.id == 2:
+        #    print('{}, {}, {}, {}'.format(x1, y1, x2, y2))
         self.frame.cvs.coords(object.id, x1, y1, x2, y2)
 
     def __reserve_event(self, event_name, count, arg1=None):
@@ -51,8 +54,9 @@ class Client_player():
         #相手の動きを取得
         #self.enemy.move()
         #self.__set_object(self.enemy)
-        self.enemy_late = copy.copy(self.enemy)
-
+        self.enemy_late = copy.deepcopy(self.enemy)
+        #print(self.enemy_late.id)
+        self.__set_object(self.enemy_late)
     def enemy_shot(self):
         #相手の射撃を取得
 
@@ -66,10 +70,12 @@ class Client_player():
                     break
             if  not flag:
                 new_bullets.append(b)
-                print(b)
-        
+                
+        #print('player: {}, nb_size: {}'.format(self.player.id, len(new_bullets)))
         for nb in new_bullets:
+            
             self.bullets.append(nb)
+            #(nb.id)
             self.__set_object(nb)
         
     def bullet_move(self):
@@ -123,6 +129,8 @@ class Client_player():
         self.bullet_move()
         self.checkCollision()
         self.checkBulletAlive()
+        #if self.player.id == 1:
+        #    print('{}, {}'.format(self.player.x, self.player.y))
 
     def checkCollision(self):
         for b in self.bullets[:]:
@@ -131,7 +139,7 @@ class Client_player():
                     self.player.damage += b.damage
                     del self.bullets[self.bullets.index(b)]
                     self.frame.cvs.delete(b.id)
-
+                    #print("player:{} is hit".format(self.player.id))
     def checkBalletPlayerCollision(self, b, p):
         for i in range(b.v):
             tmpx = b.x + (b.dx * i) / b.v

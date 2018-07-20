@@ -8,7 +8,8 @@ from game_controller import GameController
 from client import Client
 from client_player import Client_player
 import tkinter as Tk
-
+import random
+from const import (WIDTH, HEIGHT)
 
 def simulator(RUN_COUNT=100):
     f = Frame()
@@ -58,19 +59,30 @@ def simulator2(RUN_COUNT=100):
     return player1, player2
 
 def simulator3(RUN_COUNT=100):
+    #f = Frame()
     f1 = Frame()
     f2 = Frame()
-    FRAME_TIME = 100
+    FRAME_TIME = 144
 
-    player1 = Player.create(f1, 0, 0)
-    player2 = Player.create(f2, 0, 0)
-    cli1 = Client_player(f1, player1, player2, 5)
-    cli2 = Client_player(f2, player2, player1, 5)
+    #player1 = Player.create(f, random.randrange(WIDTH), random.randrange(HEIGHT))
+    #player2 = Player.create(f, random.randrange(WIDTH), random.randrange(HEIGHT))
+    player1 = Player.create(f1, random.randrange(WIDTH), random.randrange(HEIGHT))
+    player2 = Player.create(f1, random.randrange(WIDTH), random.randrange(HEIGHT))
+
+    #player1.id = 1
+    #player2.id = 2
+
+    #cli1 = Client_player(f, player1, player2, 0)
+    #cli2 = Client_player(f, player2, player1, 50)
+
+    cli1 = Client_player(f1, player1, player2, 25)
+    cli2 = Client_player(f1, player2, player1, 100)
 
     cli1.connectClient(cli2)
     cli2.connectClient(cli1)
 
     #gc = Client(f, player1, player2, 5)
+    #print('f1: {}, f2:{}'.format(f1, f2))
     print(player1.id, player2.id)
 
     def update():
@@ -82,16 +94,20 @@ def simulator3(RUN_COUNT=100):
             gc.players[1].x, gc.players[1].y))
         """
         f1.cvs.after(FRAME_TIME, update)
-        f2.cvs.after(FRAME_TIME, update)
+        #f2.cvs.after(FRAME_TIME, update)
+        #f.cvs.after(FRAME_TIME, update)
 
     f1.cvs.after(RUN_COUNT * FRAME_TIME, f1.quit)
-    f2.cvs.after(RUN_COUNT * FRAME_TIME, f2.quit)
+    #f2.cvs.after(RUN_COUNT * FRAME_TIME, f2.quit)
+    #f.cvs.after(RUN_COUNT * FRAME_TIME, f.quit)
 
     update()
     f1.pack(fill=Tk.BOTH, expand=1)
-    f2.pack(fill=Tk.BOTH, expand=1)
+    #f2.pack(fill=Tk.BOTH, expand=1)
     f1.mainloop()
-    f2.mainloop()
+    #f2.mainloop()
+    #f.pack(fill=Tk.BOTH, expand=1)
+    #f.mainloop()
     return player1, player2
 
 if __name__ == '__main__':
@@ -111,5 +127,5 @@ if __name__ == '__main__':
         results2.append((result[0].damage, result[1].damage))
         print(result[0].damage, result[1].damage)
     print('--- simulator end ---')
-    print(results)
+    #print(results)
     print(results2)
