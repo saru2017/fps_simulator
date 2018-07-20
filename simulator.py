@@ -10,6 +10,11 @@ from client_player import Client_player
 import tkinter as Tk
 import random
 from const import (WIDTH, HEIGHT)
+import csv
+
+p1_latency = 50
+p2_latency = 50
+
 
 def simulator(RUN_COUNT=100):
     f = Frame()
@@ -75,15 +80,15 @@ def simulator3(RUN_COUNT=100):
     #cli1 = Client_player(f, player1, player2, 0)
     #cli2 = Client_player(f, player2, player1, 50)
 
-    cli1 = Client_player(f1, player1, player2, 25)
-    cli2 = Client_player(f1, player2, player1, 25)
+    cli1 = Client_player(f1, player1, player2, p1_latency)
+    cli2 = Client_player(f1, player2, player1, p2_latency)
 
     cli1.connectClient(cli2)
     cli2.connectClient(cli1)
 
     #gc = Client(f, player1, player2, 5)
     #print('f1: {}, f2:{}'.format(f1, f2))
-    #print(player1.id, player2.id)
+    print(player1.id, player2.id)
 
     def update():
         cli1.update()
@@ -126,6 +131,10 @@ if __name__ == '__main__':
         result = simulator3()
         results2.append((result[0].damage, result[1].damage))
         print(result[0].damage, result[1].damage)
+        file_name = "Result_Latency#P1-{0}_P2-{1}.csv".format(p1_latency, p2_latency)
+        with open(file_name, 'a') as f:
+            writer = csv.writer(f)
+            writer.writerow([result[0].damage, result[1].damage])
     print('--- simulator end ---')
     #print(results)
     print(results2)
