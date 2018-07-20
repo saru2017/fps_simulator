@@ -64,8 +64,12 @@ class Client_player():
         #相手の動きを取得
         #self.enemy.move()
         #self.__set_object(self.enemy)
-        self.enemy_late.x = self.enemy_controller.history[-self.enemy_latency][0]
-        self.enemy_late.y = self.enemy_controller.history[-self.enemy_latency][1]
+        if self.enemy_latency > 0:
+            self.enemy_late.x = self.enemy_controller.history[-self.enemy_latency][0]
+            self.enemy_late.y = self.enemy_controller.history[-self.enemy_latency][1]
+        else:
+            self.enemy_late.x = self.enemy.x
+            self.enemy_late.y = self.enemy.y
         #print(self.enemy_late.id)
         self.__set_object(self.enemy_late, self.visible[2])
     def enemy_shot(self):
@@ -73,7 +77,8 @@ class Client_player():
 
         #相手のbulletsにあって自分のbulletsにないものを探査して、自分のbulletsにコピー
         new_bullets = []
-        for b in self.enemy_controller.history[-self.enemy_latency][2]:
+        bl = self.enemy_controller.history[-self.enemy_latency][2] if self.enemy_latency > 0 else self.enemy_controller.bullets
+        for b in bl:
             flag = False
             for b_ in self.bullets:
                 if b.id == b_.id:
@@ -81,14 +86,14 @@ class Client_player():
                     break
             if  not flag:
                 new_bullets.append(b)
-                
+
         #print('player: {}, nb_size: {}'.format(self.player.id, len(new_bullets)))
         for nb in new_bullets:
-            
+
             self.bullets.append(nb)
             #(nb.id)
             self.__set_object(nb, self.visible[3])
-        
+
     def bullet_move(self):
         for bullet in self.bullets:
             bullet.move()
@@ -166,7 +171,7 @@ class Client_player():
                     self.frame.cvs.delete(b.id)
                     #print("player:{} is hit".format(self.player.id))
     def checkBalletPlayerCollision(self, b, p):
-        
+
         for i in range(b.v):
             tmpx = b.x + (b.dx * i) / b.v
             tmpy = b.y + (b.dy * i) / b.v
