@@ -59,9 +59,14 @@ class Client_player():
         #相手のbulletsにあって自分のbulletsにないものを探査して、自分のbulletsにコピー
         new_bullets = []
         for b in self.enemy_controller.bullets:
+            flag = False
             for b_ in self.bullets:
-                if b.id != b_.id:
-                    new_bullets.append(b)
+                if b.id == b_.id:
+                    flag = True
+                    break
+            if  not flag:
+                new_bullets.append(b)
+                print(b)
         
         for nb in new_bullets:
             self.bullets.append(nb)
@@ -94,6 +99,7 @@ class Client_player():
         done_event_indexes = []
         for i, event in enumerate(self.event_queue):
             if event['count'] <= 0:
+                #print(event['name'])
                 if event['arg1'] is None:
                     getattr(self, event['name'])()
                 else:
