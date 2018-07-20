@@ -6,6 +6,7 @@ from frame import Frame
 from player import Player
 from game_controller import GameController
 from client import Client
+from client_player import Client_player
 import tkinter as Tk
 
 
@@ -40,6 +41,31 @@ def simulator2(RUN_COUNT=100):
     player1 = Player.create(f, 0, 0)
     player2 = Player.create(f, 0, 0)
     gc = Client(f, player1, player2, 5)
+    print(player1.id, player2.id)
+
+    def update():
+        gc.update()
+        print("player1: (%.1f, %.1f), player2: (%.1f, %.1f)" % (
+            gc.players[0].x, gc.players[0].y,
+            gc.players[1].x, gc.players[1].y))
+        f.cvs.after(FRAME_TIME, update)
+
+    f.cvs.after(RUN_COUNT * FRAME_TIME, f.quit)
+
+    update()
+    f.pack(fill=Tk.BOTH, expand=1)
+    f.mainloop()
+    return player1, player2
+
+def simulator3(RUN_COUNT=100):
+    f = Frame()
+    FRAME_TIME = 100
+
+    player1 = Player.create(f, 0, 0)
+    player2 = Player.create(f, 0, 0)
+    cli1 = Client_player(f, player1, player2, 5)
+    cli2 = Client_player(f, player2, player1, 5)
+    #gc = Client(f, player1, player2, 5)
     print(player1.id, player2.id)
 
     def update():
